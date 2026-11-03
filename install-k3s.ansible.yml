@@ -13,4 +13,6 @@
           - k3s
           - helm
           - podman
+          - iptables
+          - cni-plugins
         state: latest
