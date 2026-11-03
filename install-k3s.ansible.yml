@@ -1,0 +1,12 @@
+---
+- name: Install k3s into webserver network
+  hosts: webservers
+  remote_user: alpine
+
+  tasks:
+    - name: Ensure packages are installed
+      ansible.builtin.package:
+        name:
+          - k3s
+          - helm
+        state: latest
