@@ -5,9 +5,13 @@
 
   tasks:
     - name: Ensure packages are installed
-      become:
+      become: true
+      become_method: doas
+      become_user: root
       ansible.builtin.package:
         name:
           - k3s
           - helm
+          - podman
         state: latest
+    - name: start
