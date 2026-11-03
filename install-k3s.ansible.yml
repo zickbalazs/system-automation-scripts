@@ -14,4 +14,3 @@
           - helm
           - podman
         state: latest
-    - name: start
