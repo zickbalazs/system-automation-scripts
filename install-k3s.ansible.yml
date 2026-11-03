@@ -5,6 +5,7 @@
 
   tasks:
     - name: Ensure packages are installed
+      become:
       ansible.builtin.package:
         name:
           - k3s
