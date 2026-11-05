@@ -1,0 +1,16 @@
+- name: Install k3s onto masters
+  hosts: web-masters
+  remote_user: debian
+  tasks:
+    - name: Get install script
+      ansible.builtin.get_url:
+        url: https://get.k3s.io
+        mode: '755'
+        dest: ./k3s.sh
+      register: k3s_script
+    - name: Run install script
+      become: true
+      become_user: root
+      become_method: ansible.builtin.sudo
+      ansible.builtin.script:
+        cmd: '{{ k3s_script.dest }}'

@@ -1,0 +1,30 @@
+- name: Get master token
+  hosts: web-masters
+  remote_user: debian
+  tasks:
+    - name: Get Cluster token
+      any_errors_fatal: true
+      ignore_unreachable: false
+      ansible.builtin.command:
+        cmd: cat /var/lib/k3s/server/node-token
+      register: cluster_token
+- name: Install k3s onto masters
+  vars:
+    master_ip: ''
+  hosts: web-nodes
+  remote_user: debian
+  tasks:
+    - name: Get install script
+      ansible.builtin.get_url:
+        url: https://get.k3s.io
+        mode: '755'
+        dest: ./k3s.sh
+      register: k3s_script
+    - name: Run install script
+      become: true
+      become_user: root
+      become_method: ansible.builtin.sudo
+      environment:
+        K3S_TOKEN: '{{ cluster_token.stdout }}'
+      ansible.builtin.script:
+        cmd: '{{ k3s_script.dest }}'
